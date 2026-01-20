@@ -1,0 +1,11 @@
+{% if user.is_authenticated %}
+<div class="card bg-base-100 shadow-xl">
+  <div class="card-body">
+    <h2 class="card-title">Sign Out</h2>
+    <p>Click below to log out of your account.</p>
+    <div class="card-actions justify-end">
+      <a href="{% url 'logout' %}" class="btn btn-error">Log Out</a>
+    </div>
+  </div>
+</div>
+{% endif %}

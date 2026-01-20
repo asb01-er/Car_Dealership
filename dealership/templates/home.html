@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Welcome to the Car Dealership Hub</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+  <!-- Cars for Sale (Always Visible) -->
+  <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div class="card-body">
+      <h2 class="card-title">Cars for Sale</h2>
+      <p>See vehicles currently available for purchase.</p>
+      <div class="card-actions justify-end">
+        <a href="{% url 'cars_for_sale' %}" class="btn btn-success">Explore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Car (Managers Only) -->
+  {% if user.is_authenticated and user.profile.role == 'manager' %}
+  <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div class="card-body">
+      <h2 class="card-title">Add New Car</h2>
+      <p>Managers can add new vehicles to the system.</p>
+      <div class="card-actions justify-end">
+        <a href="{% url 'car_create' %}" class="btn btn-warning">Create</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Sign Up (Guests Only) -->
+  {% if not user.is_authenticated %}
+  <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div class="card-body">
+      <h2 class="card-title">Create Account</h2>
+      <p>Sign up here to access more features.</p>
+      <div class="card-actions justify-end">
+        <a href="{% url 'signup' %}" class="btn btn-accent">Sign Up</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Sign Out (Logged-in Users) -->
+ {% if user.is_authenticated %}
+<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+  <div class="card-body">
+    <h2 class="card-title">Sign Out</h2>
+    <p>Click below to log out of your account.</p>
+    <div class="card-actions justify-end">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-error">Log Out</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

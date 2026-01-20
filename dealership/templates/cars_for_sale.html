@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block content %}
+
+<a href="{% url 'home' %}" class="btn btn-primary mb-4">
+  ← Back to Home
+</a>
+
+<h2>Cars for Sale</h2>
+
+<!-- HTMX Filter Form -->
+<form
+  hx-get="{% url 'cars_for_sale' %}"
+  hx-target="#car-list"
+  hx-swap="innerHTML"
+  hx-push-url="true"
+  style="margin-bottom: 1rem"
+>
+  <input
+    type="text"
+    name="model"
+    placeholder="Model"
+    value="{{ request.GET.model }}"
+  />
+  <input
+    type="number"
+    name="max_price"
+    placeholder="Max Price"
+    value="{{ request.GET.max_price }}"
+  />
+  <button type="submit">Filter</button>
+</form>
+
+<!-- Car Listings -->
+<div id="car-list" style="display: flex; flex-wrap: wrap; gap: 2rem">
+  {% for car in cars %}
+  <div
+    id="car-{{ car.id }}"
+    style="
+      border: 1px solid #ccc;
+      padding: 1rem;
+      width: 300px;
+      background-color: #fff;
+    "
+  >
+    {% if car.image and car.image.url %}
+    <img src="{{ car.image.url }}" alt="{{ car.make }} {{ car.model }}" />
+    {% else %}
+    <div
+      style="
+        height: 200px;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      No Image
+    </div>
+    {% endif %}
+    <h3>
+      <a href="{% url 'car_detail' car.id %}">
+        {{ car.make }} {{ car.model }}
+      </a>
+    </h3>
+    <p>Year: {{ car.year }}</p>
+    <p>Price: R{{ car.price }}</p>
+
+    {% if user.is_authenticated and user.profile.role == 'manager' %}
+    <!-- HTMX Update Button -->
+    <button
+      hx-get="{% url 'car_update' car.id %}"
+      hx-target="#car-{{ car.id }}"
+      hx-swap="outerHTML"
+    >
+      Update
+    </button>
+
+    <!-- HTMX Delete Button -->
+    <button
+      hx-post="{% url 'car_delete' car.id %}"
+      hx-confirm="Are you sure you want to delete this car?"
+      hx-target="#car-{{ car.id }}"
+      hx-swap="outerHTML"
+    >
+      Delete
+    </button>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p>No cars currently available for sale.</p>
+  {% endfor %}
+</div>
+{% endblock %}

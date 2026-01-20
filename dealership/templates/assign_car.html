@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Assign Car: {{ car.make }} {{ car.model }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="employee">Select Employee:</label>
+    <select name="employee" id="employee">
+      {% for emp in employees %}
+        <option value="{{ emp.id }}">{{ emp.user.username }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Assign</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,17 @@
+<div id="car-{{ car.id }}" style="border: 2px solid #007bff; padding: 1rem; width: 300px; background-color: #eef6ff;">
+  <form method="post" enctype="multipart/form-data"
+        hx-post="{% url 'car_update' car.id %}"
+        hx-target="#car-{{ car.id }}"
+        hx-swap="outerHTML">
+    {% csrf_token %}
+    <h3>Edit {{ car.make }} {{ car.model }}</h3>
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <button type="button"
+            hx-get="{% url 'car_detail' car.id %}"
+            hx-target="#car-{{ car.id }}"
+            hx-swap="outerHTML">
+      Cancel
+    </button>
+  </form>
+</div>

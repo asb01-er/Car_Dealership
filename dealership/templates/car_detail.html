@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-16 p-8 bg-base-100 shadow-xl rounded-xl">
+  <h2 class="text-3xl font-bold mb-6 text-center">{{ car.make }} {{ car.model }} ({{ car.year }})</h2>
+
+  {% if car.image %}
+  <div class="flex justify-center mb-6">
+    <img src="{{ car.image.url }}" alt="{{ car.make }} {{ car.model }}" class="w-96 h-auto rounded-lg shadow-md">
+  </div>
+  {% endif %}
+
+  <div class="space-y-3 text-lg">
+    <p><strong>Price:</strong> R{{ car.price }}</p>
+    <p><strong>Year:</strong> {{ car.year }}</p>
+    <p><strong>Available:</strong> {{ car.for_sale|yesno:"Yes,No" }}</p>
+  </div>
+
+  <div class="mt-6 text-center">
+    <a href="{% url 'cars_for_sale' %}" class="btn btn-primary hover:btn-secondary transition-colors duration-300">
+      ← Back to Listings
+    </a>
+  </div>
+</div>
+{% endblock %}

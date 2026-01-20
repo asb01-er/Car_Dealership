@@ -1,0 +1,17 @@
+<div id="car-{{ car.id }}" style="border: 1px solid #ccc; padding: 1rem; width: 300px; background-color: #fff;">
+  {% if car.image %}
+    <img src="{{ car.image.url }}" alt="{{ car.make }} {{ car.model }}" style="width:100%; height:auto;">
+  {% endif %}
+  <h3>
+    <a href="{% url 'car_detail' car.id %}">
+      {{ car.make }} {{ car.model }}
+    </a>
+  </h3>
+  <p>Year: {{ car.year }}</p>
+  <p>Price: R{{ car.price }}</p>
+
+  {% if user.is_authenticated and user.profile.role == 'manager' %}
+    <button hx-get="{% url 'car_update' car.id %}" hx-target="#car-{{ car.id }}" hx-swap="outerHTML">Update</button>
+    <button hx-post="{% url 'car_delete' car.id %}" hx-confirm="Are you sure?" hx-target="#car-{{ car.id }}" hx-swap="outerHTML">Delete</button>
+  {% endif %}
+</div>
